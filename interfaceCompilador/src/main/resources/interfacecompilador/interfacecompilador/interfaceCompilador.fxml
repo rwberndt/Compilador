@@ -19,7 +19,7 @@
                <children>
                   <VBox HBox.hgrow="NEVER">
                      <children>
-                        <TextArea fx:id="linhas" disable="true" minWidth="18.0" prefHeight="178.0" prefWidth="18.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
+                        <TextArea fx:id="linhas" disable="true" minWidth="18.0" prefHeight="522.0" prefWidth="33.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
@@ -34,7 +34,7 @@
                         <Insets />
                      </HBox.margin>
                   </VBox>
-                  <TextArea fx:id="editor" onKeyTyped="#alterarContadorDeLinhaAoDigitar" HBox.hgrow="ALWAYS" />
+                  <TextArea fx:id="editor" onKeyPressed="#controlarlinhas" prefHeight="534.0" prefWidth="1134.0" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
             <HBox>

@@ -2,6 +2,7 @@ package interfacecompilador.interfacecompilador;
 
 import javafx.application.Application;
 import javafx.event.EventType;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -10,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.paint.Color;
@@ -19,13 +21,17 @@ import javafx.scene.layout.Border;
 
 import java.io.IOException;
 
+
 public class InterfaceApplication extends Application {
+
+    @FXML
+    private TextArea linhas;
+
+    public int quantidadeDeLinhas = 0;
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(InterfaceApplication.class.getResource("interfaceCompilador.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 900, 600);
-
-        TextArea areaCodigo = (TextArea) scene.lookup("#editor");
         stage.minHeightProperty().set(600);
         stage.minWidthProperty().set(900);
         stage.setScene(scene);
@@ -62,5 +68,4 @@ public class InterfaceApplication extends Application {
     public static void main(String[] args) {
         launch();
     }
-
 }

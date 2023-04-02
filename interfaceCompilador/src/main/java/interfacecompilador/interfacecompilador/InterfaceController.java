@@ -32,6 +32,8 @@ public class InterfaceController {
     @FXML
     private TextArea linhas;
 
+    private int qtdlinhas = 1;
+
     private static final FileChooser file = new FileChooser();
 
     private String pasta;
@@ -48,7 +50,6 @@ public class InterfaceController {
         labelStatus.setText("");
         editor.setText("");
         mensagem.setText("");
-        removerLinhas();
     }
 
     public void abrirArquivo() throws IOException {
@@ -59,8 +60,6 @@ public class InterfaceController {
             labelStatus.setText(selectedFile.getAbsolutePath());
             pasta = selectedFile.getAbsolutePath();
             mensagem.setText("");
-            adicionarLinhas();
-
         }
     }
 
@@ -84,9 +83,6 @@ public class InterfaceController {
             writer.close();
         }
     }
-
-
-
     public void copiarAquivo() {
         editor.copy();
     }
@@ -106,60 +102,8 @@ public class InterfaceController {
     public void compilar(){
         mensagem.setText("Programa Compilado com sucesso!");
     }
-    private void adicionarLinhas() {
-        int linhasExistentes = getQuantidadeLinhas();
-        int tamUltimaLinhaAnterior = getTamanhoUltimaLinha();
-        IntStream.range(0, editor.getParagraphs().size()).forEach(x -> {
-            int linhaAtual = x + 1;
-            if (linhaAtual > linhasExistentes) {
-                linhas.setText(linhas.getText().concat("\n" + linhaAtual));
-            }
-        });
-        redefinirLarguraLista(tamUltimaLinhaAnterior);
-    }
 
-    private void removerLinhas() {
-        int linhasExistentes = getQuantidadeLinhas();
-        int tamUltimaLinhaAnterior = getTamanhoUltimaLinha();
-        IntStream.range(1, linhasExistentes).forEach(x -> {
-            int linhaAtual = x + 1;
-            if (linhaAtual > editor.getParagraphs().size()) {
-                linhas.setText(linhas.getText().replaceFirst("\n" + linhaAtual, ""));
-            }
-        });
-        redefinirLarguraLista(tamUltimaLinhaAnterior);
-    }
 
-    private int getTamanhoUltimaLinha() {
-        String[] todasLinhas = linhas.getText().split("\n");
-        return todasLinhas[todasLinhas.length - 1].length();
-    }
-
-    private int getQuantidadeLinhas() {
-        return linhas.getText().split("\n").length;
-    }
-
-    private void redefinirLarguraLista(int tamUltimaLinhaAnterior) {
-        int tamUltimaLinha = getTamanhoUltimaLinha();
-        if (tamUltimaLinhaAnterior != tamUltimaLinha) {
-            double newScale = (tamUltimaLinha == 2 ? 0.6 : (tamUltimaLinha == 1 ? 1 : 0.5));
-            linhas.setMinWidth(20 * tamUltimaLinha * newScale);
-            linhas.setMaxWidth(20 * tamUltimaLinha * newScale);
-        }
-    }
-
-    public void alterarContadorDeLinhaAoDigitar(KeyEvent keyEvent) {
-        if (keyEvent.getCode().equals(KeyCode.ENTER)
-                || (keyEvent.getCode().equals(KeyCode.V) && keyEvent.isControlDown())) {
-            adicionarLinhas();
-        }
-        if (keyEvent.getCode().equals(KeyCode.BACK_SPACE) || keyEvent.getCode().equals(KeyCode.DELETE)
-                || (keyEvent.getCode().equals(KeyCode.X) && keyEvent.isControlDown())) {
-            if (editor.getParagraphs().size() != getQuantidadeLinhas()) {
-                removerLinhas();
-            }
-        }
-    }
 
     public void chamarAcoesTela(KeyEvent keyEvent) throws IOException {
         if (keyEvent.isControlDown()) {
@@ -177,18 +121,26 @@ public class InterfaceController {
             }
         }
     }
+    public void controlarlinhas()
+    {
+        var contagem = editor.getText().chars().filter (a -> a == '\n').count();
 
-    public void novaListaQuebraLinhas() {
-
-        String text = editor.getText();
-
-        listaQuebraLinhas.clear();
-
-        for (int i=0; i<text.length(); i++) {
-            if ('\n' == text.charAt(i)) {
-                listaQuebraLinhas.add(i);
-            }
+        if(contagem >= qtdlinhas)
+        {
+            qtdlinhas++;
+            addLinhas();
+        }else if (contagem < qtdlinhas)
+        {
+            removeLinhas();
+            qtdlinhas--;
         }
     }
-
+    public void addLinhas()
+    {
+        linhas.setText(linhas.getText().concat("\n" + qtdlinhas));
+    }
+    public void removeLinhas()
+    {
+        linhas.setText(linhas.getText().replaceFirst("\n" + qtdlinhas, ""));
+    }
 }
