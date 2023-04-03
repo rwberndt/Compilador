@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane minHeight="700.0" minWidth="1100.0" onKeyPressed="#chamarAcoesTela" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interfacecompilador.interfacecompilador.InterfaceController">
+<AnchorPane minHeight="700.0" minWidth="1100.0" onKeyPressed="#onKeyPressed" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interfacecompilador.interfacecompilador.InterfaceController">
    <children>
       <SplitPane dividerPositions="0.8206305479032752" layoutX="156.0" layoutY="69.0" orientation="VERTICAL" prefHeight="582.0" prefWidth="927.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
@@ -19,16 +19,11 @@
                <children>
                   <VBox HBox.hgrow="NEVER">
                      <children>
-                        <TextArea fx:id="linhas" disable="true" minWidth="18.0" prefHeight="522.0" prefWidth="33.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
+                        <TextArea fx:id="textAreaLines" disable="true" minWidth="18.0" prefHeight="522.0" prefWidth="33.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
                         </TextArea>
-                        <Label fx:id="labelLines" disable="true" maxHeight="12.0" minHeight="12.0" prefHeight="12.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </Label>
                      </children>
                      <HBox.margin>
                         <Insets />
@@ -48,7 +43,7 @@
          </Label>
       <VBox layoutX="-10.0" minWidth="102.0" prefHeight="578.0" prefWidth="179.0">
          <children>
-            <Button alignment="BOTTOM_CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#novoArquivo" prefHeight="55.0" prefWidth="150.0" text="Novo" textAlignment="RIGHT">
+            <Button alignment="BOTTOM_CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#newFile" prefHeight="55.0" prefWidth="150.0" text="Novo" textAlignment="RIGHT">
                <graphic>
                   <ImageView fitHeight="51.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -63,7 +58,7 @@
                   <Insets bottom="7.0" />
                </padding>
             </Button>
-            <Button alignment="BOTTOM_CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#abrirArquivo" prefHeight="55.0" prefWidth="150.0" text="Abrir" textAlignment="RIGHT">
+            <Button alignment="BOTTOM_CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#openFile" prefHeight="55.0" prefWidth="150.0" text="Abrir" textAlignment="RIGHT">
                <graphic>
                   <ImageView fitHeight="47.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -93,7 +88,7 @@
                   <Insets bottom="7.0" />
                </padding>
             </Button>
-            <Button alignment="BOTTOM_CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#salvarArquivo" prefHeight="55.0" prefWidth="150.0" text="Salvar" textAlignment="RIGHT">
+            <Button alignment="BOTTOM_CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#saveFile" prefHeight="55.0" prefWidth="150.0" text="Salvar" textAlignment="RIGHT">
                <graphic>
                   <ImageView fitHeight="45.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -108,7 +103,7 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </Button>
-            <Button alignment="BOTTOM_CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#compilar" prefHeight="55.0" prefWidth="150.0" text="Compilar" textAlignment="RIGHT">
+            <Button alignment="BOTTOM_CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#compile" prefHeight="55.0" prefWidth="150.0" text="Compilar" textAlignment="RIGHT">
                <graphic>
                   <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -153,7 +148,7 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </Button>
-            <Button alignment="BOTTOM_CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#Equipe" prefHeight="55.0" prefWidth="150.0" text="Equipe" textAlignment="RIGHT">
+            <Button alignment="BOTTOM_CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#showNames" prefHeight="55.0" prefWidth="150.0" text="Equipe" textAlignment="RIGHT">
                <graphic>
                   <ImageView fitHeight="44.0" fitWidth="69.0" pickOnBounds="true" preserveRatio="true">
                      <image>

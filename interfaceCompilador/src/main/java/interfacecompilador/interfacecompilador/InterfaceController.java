@@ -30,43 +30,37 @@ public class InterfaceController {
     private Label labelStatus;
 
     @FXML
-    private Label labelLines;
-
-    @FXML
-    private TextArea linhas;
+    private TextArea textAreaLines;
 
     private int qtdlinhas = 1;
 
     private static final FileChooser file = new FileChooser();
 
-    private String pasta;
-
-    private ArrayList<Integer> listaQuebraLinhas = new ArrayList<Integer>();
+    private String folder;
 
     public void initialize() {
-        linhas.setText(String.valueOf(textAreaCode.getParagraphs().size()));
-        labelLines.setVisible(false);
+        textAreaLines.setText(String.valueOf(textAreaCode.getParagraphs().size()));
         file.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
     }
 
-    public void novoArquivo() {
+    public void newFile() {
         labelStatus.setText("");
         textAreaCode.setText("");
         textAreaMessage.setText("");
     }
 
-    public void abrirArquivo() throws IOException {
+    public void openFile() throws IOException {
         File selectedFile = file.showOpenDialog(textAreaCode.getScene().getWindow());
         if (selectedFile != null) {
             String stringDoArquivo = Files.readString(selectedFile.toPath(), StandardCharsets.UTF_8);
             textAreaCode.setText(stringDoArquivo);
             labelStatus.setText(selectedFile.getAbsolutePath());
-            pasta = selectedFile.getAbsolutePath();
+            folder = selectedFile.getAbsolutePath();
             textAreaMessage.setText("");
         }
     }
 
-    public void salvarArquivo() throws IOException {
+    public void saveFile() throws IOException {
         if (labelStatus.getText() == null || labelStatus.getText().isEmpty()) {
             File arquivo = file.showSaveDialog(textAreaCode.getScene().getWindow());
             if (arquivo == null) {
@@ -74,7 +68,7 @@ public class InterfaceController {
             }
             arquivo.createNewFile();
             labelStatus.setText(arquivo.getAbsolutePath());
-            pasta = arquivo.getAbsolutePath();
+            folder = arquivo.getAbsolutePath();
         }
         editarArquivoJaExistente();
     }
@@ -99,28 +93,27 @@ public class InterfaceController {
         textAreaCode.cut();
     }
 
-    public void Equipe() {
+    public void showNames() {
         textAreaMessage.setText("Equipe: Vinícius da Cunha Lopes e Ricardo Berndt");
     }
 
-    public void compilar() {
+    public void compile() {
         textAreaMessage.setText("Programa Compilado com sucesso!");
     }
 
-
-    public void chamarAcoesTela(KeyEvent keyEvent) throws IOException {
+    public void onKeyPressed(KeyEvent keyEvent) throws IOException {
         if (keyEvent.isControlDown()) {
             switch (keyEvent.getCode()) {
-                case S -> salvarArquivo();
-                case N -> novoArquivo();
-                case O -> abrirArquivo();
+                case S -> saveFile();
+                case N -> newFile();
+                case O -> openFile();
             }
         } else {
             if (keyEvent.getCode() == KeyCode.F7) {
-                compilar();
+                compile();
             }
             if (keyEvent.getCode() == KeyCode.F1) {
-                Equipe();
+                showNames();
             }
         }
     }
@@ -138,19 +131,19 @@ public class InterfaceController {
     }
 
     public void addLinhas() {
-        linhas.setText(linhas.getText().concat("\n" + qtdlinhas));
+        textAreaLines.setText(textAreaLines.getText().concat("\n" + qtdlinhas));
     }
 
     public void removeLinhas() {
-        linhas.setText(linhas.getText().replaceFirst("\n" + qtdlinhas, ""));
+        textAreaLines.setText(textAreaLines.getText().replaceFirst("\n" + qtdlinhas, ""));
     }
 
     public void setUpScrolPane() {
         ScrollBar codeScrollBar = (ScrollBar) textAreaCode.lookup(".scroll-bar");
-        ScrollBar linesScrollBar = (ScrollBar) linhas.lookup(".scroll-bar");
+        ScrollBar linesScrollBar = (ScrollBar) textAreaLines.lookup(".scroll-bar");
         codeScrollBar.valueProperty().bindBidirectional(linesScrollBar.valueProperty());
         setUpScrollPaneScrollBarPolicy(textAreaCode, ScrollPane.ScrollBarPolicy.ALWAYS);
-        setUpScrollPaneScrollBarPolicy(linhas, ScrollPane.ScrollBarPolicy.NEVER);
+        setUpScrollPaneScrollBarPolicy(textAreaLines, ScrollPane.ScrollBarPolicy.NEVER);
         setUpScrollPaneScrollBarPolicy(textAreaMessage, ScrollPane.ScrollBarPolicy.ALWAYS);
 
     }

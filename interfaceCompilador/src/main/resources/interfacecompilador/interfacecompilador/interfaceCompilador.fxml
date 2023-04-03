@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane minHeight="700.0" minWidth="1100.0" onKeyPressed="#chamarAcoesTela" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interfacecompilador.interfacecompilador.InterfaceController">
+<AnchorPane minHeight="700.0" minWidth="1100.0" onKeyPressed="#onKeyPressed" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interfacecompilador.interfacecompilador.InterfaceController">
    <children>
       <SplitPane dividerPositions="0.8206305479032752" layoutX="156.0" layoutY="69.0" orientation="VERTICAL" prefHeight="582.0" prefWidth="927.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
@@ -19,16 +19,11 @@
                <children>
                   <VBox HBox.hgrow="NEVER">
                      <children>
-                        <TextArea fx:id="linhas" disable="true" minWidth="18.0" prefHeight="522.0" prefWidth="33.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
+                        <TextArea fx:id="textAreaLines" disable="true" minWidth="18.0" prefHeight="522.0" prefWidth="33.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
                         </TextArea>
-                        <Label fx:id="labelLines" disable="true" maxHeight="12.0" minHeight="12.0" prefHeight="12.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </Label>
                      </children>
                      <HBox.margin>
                         <Insets />
