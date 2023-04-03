@@ -1,7 +1,10 @@
 package interfacecompilador.interfacecompilador;
 
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -18,16 +21,16 @@ public class InterfaceController {
 
 
     @FXML
-    private TextArea mensagem;
+    private TextArea textAreaMessage;
 
     @FXML
-    private TextArea editor;
+    private TextArea textAreaCode;
 
     @FXML
     private Label labelStatus;
 
     @FXML
-    private Label labelLinhas;
+    private Label labelLines;
 
     @FXML
     private TextArea linhas;
@@ -41,31 +44,31 @@ public class InterfaceController {
     private ArrayList<Integer> listaQuebraLinhas = new ArrayList<Integer>();
 
     public void initialize() {
-        linhas.setText(String.valueOf(editor.getParagraphs().size()));
-        labelLinhas.setVisible(false);
+        linhas.setText(String.valueOf(textAreaCode.getParagraphs().size()));
+        labelLines.setVisible(false);
         file.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
     }
 
     public void novoArquivo() {
         labelStatus.setText("");
-        editor.setText("");
-        mensagem.setText("");
+        textAreaCode.setText("");
+        textAreaMessage.setText("");
     }
 
     public void abrirArquivo() throws IOException {
-        File selectedFile = file.showOpenDialog(editor.getScene().getWindow());
+        File selectedFile = file.showOpenDialog(textAreaCode.getScene().getWindow());
         if (selectedFile != null) {
             String stringDoArquivo = Files.readString(selectedFile.toPath(), StandardCharsets.UTF_8);
-            editor.setText(stringDoArquivo);
+            textAreaCode.setText(stringDoArquivo);
             labelStatus.setText(selectedFile.getAbsolutePath());
             pasta = selectedFile.getAbsolutePath();
-            mensagem.setText("");
+            textAreaMessage.setText("");
         }
     }
 
     public void salvarArquivo() throws IOException {
         if (labelStatus.getText() == null || labelStatus.getText().isEmpty()) {
-            File arquivo = file.showSaveDialog(editor.getScene().getWindow());
+            File arquivo = file.showSaveDialog(textAreaCode.getScene().getWindow());
             if (arquivo == null) {
                 return;
             }
@@ -79,30 +82,30 @@ public class InterfaceController {
     private void editarArquivoJaExistente() throws IOException {
         if (labelStatus.getText() != null && !labelStatus.getText().isEmpty()) {
             FileWriter writer = new FileWriter(labelStatus.getText(), Charset.availableCharsets().get("UTF-8"), false);
-            writer.write(editor.getText());
+            writer.write(textAreaCode.getText());
             writer.close();
         }
     }
+
     public void copiarAquivo() {
-        editor.copy();
+        textAreaCode.copy();
     }
 
     public void colarnoArquivo() {
-        editor.paste();
+        textAreaCode.paste();
     }
 
     public void recortarArquivo() {
-        editor.cut();
+        textAreaCode.cut();
     }
 
     public void Equipe() {
-        mensagem.setText("Equipe: Vinícius da Cunha Lopes e Ricardo Berndt");
+        textAreaMessage.setText("Equipe: Vinícius da Cunha Lopes e Ricardo Berndt");
     }
 
-    public void compilar(){
-        mensagem.setText("Programa Compilado com sucesso!");
+    public void compilar() {
+        textAreaMessage.setText("Programa Compilado com sucesso!");
     }
-
 
 
     public void chamarAcoesTela(KeyEvent keyEvent) throws IOException {
@@ -121,26 +124,40 @@ public class InterfaceController {
             }
         }
     }
-    public void controlarlinhas()
-    {
-        var contagem = editor.getText().chars().filter (a -> a == '\n').count();
 
-        if(contagem >= qtdlinhas)
-        {
+    public void controlarlinhas() {
+        var contagem = textAreaCode.getText().chars().filter(a -> a == '\n').count();
+
+        if (contagem >= qtdlinhas) {
             qtdlinhas++;
             addLinhas();
-        }else if (contagem < qtdlinhas)
-        {
+        } else if (contagem < qtdlinhas) {
             removeLinhas();
             qtdlinhas--;
         }
     }
-    public void addLinhas()
-    {
+
+    public void addLinhas() {
         linhas.setText(linhas.getText().concat("\n" + qtdlinhas));
     }
-    public void removeLinhas()
-    {
+
+    public void removeLinhas() {
         linhas.setText(linhas.getText().replaceFirst("\n" + qtdlinhas, ""));
+    }
+
+    public void setUpScrolPane() {
+        ScrollBar codeScrollBar = (ScrollBar) textAreaCode.lookup(".scroll-bar");
+        ScrollBar linesScrollBar = (ScrollBar) linhas.lookup(".scroll-bar");
+        codeScrollBar.valueProperty().bindBidirectional(linesScrollBar.valueProperty());
+        setUpScrollPaneScrollBarPolicy(textAreaCode, ScrollPane.ScrollBarPolicy.ALWAYS);
+        setUpScrollPaneScrollBarPolicy(linhas, ScrollPane.ScrollBarPolicy.NEVER);
+        setUpScrollPaneScrollBarPolicy(textAreaMessage, ScrollPane.ScrollBarPolicy.ALWAYS);
+
+    }
+
+    private void setUpScrollPaneScrollBarPolicy(Node node, ScrollPane.ScrollBarPolicy policy) {
+        ScrollPane scrollPaneCodigo = (ScrollPane) node.lookup(".scroll-pane");
+        scrollPaneCodigo.setVbarPolicy(policy);
+        scrollPaneCodigo.setHbarPolicy(policy);
     }
 }

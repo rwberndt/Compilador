@@ -24,7 +24,7 @@
                               <Insets />
                            </VBox.margin>
                         </TextArea>
-                        <Label fx:id="labelLinhas" disable="true" maxHeight="12.0" minHeight="12.0" prefHeight="12.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
+                        <Label fx:id="labelLines" disable="true" maxHeight="12.0" minHeight="12.0" prefHeight="12.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
@@ -34,12 +34,12 @@
                         <Insets />
                      </HBox.margin>
                   </VBox>
-                  <TextArea fx:id="editor" onKeyPressed="#controlarlinhas" prefHeight="534.0" prefWidth="1134.0" HBox.hgrow="ALWAYS" />
+                  <TextArea fx:id="textAreaCode" onKeyPressed="#controlarlinhas" prefHeight="534.0" prefWidth="1134.0" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
             <HBox>
                <children>
-                  <TextArea fx:id="mensagem" editable="false" prefHeight="114.0" prefWidth="1275.0" HBox.hgrow="ALWAYS" />
+                  <TextArea fx:id="textAreaMessage" editable="false" prefHeight="114.0" prefWidth="1275.0" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
          </items>
