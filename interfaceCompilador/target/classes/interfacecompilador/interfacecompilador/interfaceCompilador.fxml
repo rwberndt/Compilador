@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane minHeight="700.0" minWidth="1100.0" onKeyPressed="#onKeyPressed" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interfacecompilador.interfacecompilador.InterfaceController">
+<AnchorPane minHeight="700.0" minWidth="1100.0" onKeyPressed="#onKeyPressed" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interfacecompilador.interfacecompilador.CompiladorController">
    <children>
       <SplitPane dividerPositions="0.8206305479032752" layoutX="156.0" layoutY="69.0" orientation="VERTICAL" prefHeight="582.0" prefWidth="927.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
@@ -29,7 +29,7 @@
                         <Insets />
                      </HBox.margin>
                   </VBox>
-                  <TextArea fx:id="textAreaCode" onKeyPressed="#controlarlinhas" prefHeight="534.0" prefWidth="1134.0" HBox.hgrow="ALWAYS" />
+                  <TextArea fx:id="textAreaCode" onKeyPressed="#controlLines" prefHeight="534.0" prefWidth="1134.0" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
             <HBox>
@@ -73,7 +73,7 @@
                   <Insets bottom="7.0" />
                </padding>
             </Button>
-            <Button alignment="BOTTOM_CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#copiarAquivo" prefHeight="55.0" prefWidth="150.0" text="Copiar" textAlignment="RIGHT">
+            <Button alignment="BOTTOM_CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#copyFile" prefHeight="55.0" prefWidth="150.0" text="Copiar" textAlignment="RIGHT">
                <graphic>
                   <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -118,7 +118,7 @@
                   <Insets bottom="7.0" />
                </padding>
             </Button>
-            <Button alignment="BOTTOM_CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#recortarArquivo" prefHeight="47.0" prefWidth="150.0" text="Recortar" textAlignment="RIGHT">
+            <Button alignment="BOTTOM_CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#cutFile" prefHeight="47.0" prefWidth="150.0" text="Recortar" textAlignment="RIGHT">
                <graphic>
                   <ImageView fitHeight="40.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -133,7 +133,7 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </Button>
-            <Button alignment="BOTTOM_CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#colarnoArquivo" prefHeight="55.0" prefWidth="150.0" text="Colar" textAlignment="RIGHT">
+            <Button alignment="BOTTOM_CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#pasteFile" prefHeight="55.0" prefWidth="150.0" text="Colar" textAlignment="RIGHT">
                <graphic>
                   <ImageView fitHeight="32.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                      <image>

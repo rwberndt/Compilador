@@ -14,10 +14,8 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.stream.IntStream;
 
-public class InterfaceController {
+public class CompiladorController {
 
 
     @FXML
@@ -32,7 +30,7 @@ public class InterfaceController {
     @FXML
     private TextArea textAreaLines;
 
-    private int qtdlinhas = 1;
+    private int qtdlines = 1;
 
     private static final FileChooser file = new FileChooser();
 
@@ -70,10 +68,10 @@ public class InterfaceController {
             labelStatus.setText(arquivo.getAbsolutePath());
             folder = arquivo.getAbsolutePath();
         }
-        editarArquivoJaExistente();
+        editFile();
     }
 
-    private void editarArquivoJaExistente() throws IOException {
+    private void editFile() throws IOException {
         if (labelStatus.getText() != null && !labelStatus.getText().isEmpty()) {
             FileWriter writer = new FileWriter(labelStatus.getText(), Charset.availableCharsets().get("UTF-8"), false);
             writer.write(textAreaCode.getText());
@@ -81,15 +79,15 @@ public class InterfaceController {
         }
     }
 
-    public void copiarAquivo() {
+    public void copyFile() {
         textAreaCode.copy();
     }
 
-    public void colarnoArquivo() {
+    public void pasteFile() {
         textAreaCode.paste();
     }
 
-    public void recortarArquivo() {
+    public void cutFile() {
         textAreaCode.cut();
     }
 
@@ -118,24 +116,24 @@ public class InterfaceController {
         }
     }
 
-    public void controlarlinhas() {
-        var contagem = textAreaCode.getText().chars().filter(a -> a == '\n').count();
+    public void controlLines() {
+        var contagem = textAreaCode.getText().chars().filter(a -> a == '\n').count()+1;
 
-        if (contagem >= qtdlinhas) {
-            qtdlinhas++;
-            addLinhas();
-        } else if (contagem < qtdlinhas) {
-            removeLinhas();
-            qtdlinhas--;
+        if (contagem > qtdlines) {
+            qtdlines++;
+            addLines();
+        } else if (contagem < qtdlines) {
+            removeLines();
+            qtdlines--;
         }
     }
 
-    public void addLinhas() {
-        textAreaLines.setText(textAreaLines.getText().concat("\n" + qtdlinhas));
+    public void addLines() {
+        textAreaLines.setText(textAreaLines.getText().concat("\n" + qtdlines));
     }
 
-    public void removeLinhas() {
-        textAreaLines.setText(textAreaLines.getText().replaceFirst("\n" + qtdlinhas, ""));
+    public void removeLines() {
+        textAreaLines.setText(textAreaLines.getText().replaceFirst("\n" + qtdlines, ""));
     }
 
     public void setUpScrolPane() {
