@@ -1,5 +1,8 @@
 package interfacecompilador.interfacecompilador;
 
+import ClassesGals.LexicalError;
+import ClassesGals.Lexico;
+import ClassesGals.Token;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -95,9 +98,61 @@ public class CompiladorController {
         textAreaMessage.setText("Equipe: Vinícius da Cunha Lopes e Ricardo Berndt");
     }
 
-    public void compile() {
-        textAreaMessage.setText("Programa Compilado com sucesso!");
+    public void compile(String input) {
+        StringBuilder mensagem = new StringBuilder();
+        Lexico lexico = new Lexico();
+        lexico.setInput(input);
+        try {
+            mensagem.append( "Linha | Classe | Lexema\n");
+            Token token = lexico.nextToken();
+            while( token != null) {
+                mensagem.append(token.toString()); mensagem.append(GetLineFromPosition(token.getPosition()) + " ");
+                mensagem.append(SearchInTokenList(token.getId()) + " "); mensagem.append(token.getLexeme()+"\n");
+                token= lexico.nextToken(); }
+            mensagem.append("Programa compilado com sucesso");
+        }
+        catch(LexicalError e)
+        {
+            mensagem = new StringBuilder();
+            mensagem.append( "Linha | Classe | Lexema\n");
+            mensagem.append( "Erro na linha:" + GetLineFromPosition(e.getPosition())+ " " + e.getMessage());
+        }
+        //areaDeMensagem.input(mensagem)
     }
+    public String SearchInTokenList(int id)
+    {
+        if(id==2)
+        {
+            return "identificador";
+        }
+        else if(id==3)
+        {
+            return "int";
+        }
+        else if(id==4)
+        {
+            return "float"; }
+        else if(id==5)
+        {
+            return "bin"; }
+        else if(id==6)
+        {
+            return "string"; }
+        else if(id <= 26)
+        {
+            return "simbolo especial"; }
+        else if(id<=36)
+        {
+            return "palavra reservada"; }
+
+        return "class not found";
+    }
+
+    public String GetLineFromPosition(Integer position)
+    {
+        return position.toString();
+    }
+
 
     public void onKeyPressed(KeyEvent keyEvent) throws IOException {
         if (keyEvent.isControlDown()) {
@@ -108,7 +163,7 @@ public class CompiladorController {
             }
         } else {
             if (keyEvent.getCode() == KeyCode.F7) {
-                compile();
+                compile(textAreaCode.getText());
             }
             if (keyEvent.getCode() == KeyCode.F1) {
                 showNames();
