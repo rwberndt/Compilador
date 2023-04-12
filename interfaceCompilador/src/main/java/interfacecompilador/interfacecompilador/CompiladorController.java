@@ -154,7 +154,16 @@ public class CompiladorController {
 
     public String GetLineFromPosition(Integer position)
     {
-        return position.toString();
+        Integer lines = 0;
+        for (int i = 0; i < position; i++)
+        {
+            if (textAreaCode.getText().charAt(i) == '\n') {
+                lines++;
+            }
+        }
+
+        lines++;
+        return lines.toString();
     }
 
 
