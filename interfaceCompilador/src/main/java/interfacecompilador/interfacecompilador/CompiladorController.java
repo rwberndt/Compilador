@@ -1,8 +1,6 @@
 package interfacecompilador.interfacecompilador;
 
-import ClassesGals.LexicalError;
-import ClassesGals.Lexico;
-import ClassesGals.Token;
+import ClassesGals.*;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -114,10 +112,16 @@ public class CompiladorController {
         catch(LexicalError e)
         {
             mensagem = new StringBuilder();
-            mensagem.append( "Linha | Classe | Lexema\n");
-            mensagem.append( "Erro na linha:" + GetLineFromPosition(e.getPosition())+ " " + e.getMessage());
+            if(e.getMessage().contains("símbolo inválido"))
+            {
+                mensagem.append("Erro na linha " + GetLineFromPosition(e.getPosition()) + " -  símbolo inválido");
+            }else
+            {
+                mensagem.append( "Erro na linha:" + GetLineFromPosition(e.getPosition())+ " - " + e.getMessage());
+            }
+        }finally {
+            textAreaMessage.setText(mensagem.toString());
         }
-        //areaDeMensagem.input(mensagem)
     }
     public String SearchInTokenList(int id)
     {
