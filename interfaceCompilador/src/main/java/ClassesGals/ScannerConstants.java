@@ -1247,7 +1247,7 @@ public interface ScannerConstants
 
     String[] SCANNER_ERROR =
     {
-        "Caractere n�o esperado",
+        "símbolo inválido",
         "",
         "Erro identificando \"!=\"",
         "constante_string inválida",

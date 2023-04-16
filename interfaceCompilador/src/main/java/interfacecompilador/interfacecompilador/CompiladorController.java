@@ -96,7 +96,8 @@ public class CompiladorController {
         textAreaMessage.setText("Equipe: Vinícius da Cunha Lopes e Ricardo Berndt");
     }
 
-    public void compile(String input) {
+    public void compile() {
+        var input = textAreaCode.getText();
         StringBuilder mensagem = new StringBuilder();
         Lexico lexico = new Lexico();
         lexico.setInput(input);
@@ -104,7 +105,7 @@ public class CompiladorController {
             mensagem.append( "Linha | Classe | Lexema\n");
             Token token = lexico.nextToken();
             while( token != null) {
-                mensagem.append(token.toString()); mensagem.append(GetLineFromPosition(token.getPosition()) + " ");
+                mensagem.append(GetLineFromPosition(token.getPosition()) + " ");
                 mensagem.append(SearchInTokenList(token.getId()) + " "); mensagem.append(token.getLexeme()+"\n");
                 token= lexico.nextToken(); }
             mensagem.append("Programa compilado com sucesso");
@@ -114,7 +115,8 @@ public class CompiladorController {
             mensagem = new StringBuilder();
             if(e.getMessage().contains("símbolo inválido"))
             {
-                mensagem.append("Erro na linha " + GetLineFromPosition(e.getPosition()) + " -  símbolo inválido");
+                mensagem.append("Erro na linha " + GetLineFromPosition(e.getPosition()) +
+                        " - " + textAreaCode.getText().charAt(e.getPosition()) + " -  símbolo inválido");
             }else
             {
                 mensagem.append( "Erro na linha:" + GetLineFromPosition(e.getPosition())+ " - " + e.getMessage());
@@ -176,7 +178,7 @@ public class CompiladorController {
             }
         } else {
             if (keyEvent.getCode() == KeyCode.F7) {
-                compile(textAreaCode.getText());
+                compile();
             }
             if (keyEvent.getCode() == KeyCode.F1) {
                 showNames();
