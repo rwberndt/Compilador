@@ -1,4 +1,4 @@
-package ClassesGals;
+package ArquivosGals;
 
 public class Token
 {

@@ -1,6 +1,8 @@
 package interfacecompilador.interfacecompilador;
 
-import ClassesGals.*;
+import ArquivosGals.LexicalError;
+import ArquivosGals.Lexico;
+import ArquivosGals.Token;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
