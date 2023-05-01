@@ -1,8 +1,6 @@
 package interfacecompilador.interfacecompilador;
 
-import ArquivosGals.LexicalError;
-import ArquivosGals.Lexico;
-import ArquivosGals.Token;
+import ArquivosGals.*;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -98,21 +96,54 @@ public class CompiladorController {
         textAreaMessage.setText("Equipe: Vinícius da Cunha Lopes e Ricardo Berndt");
     }
 
-    public void compile() {
+//    public void compile() {
+//        var input = textAreaCode.getText();
+//        StringBuilder mensagem = new StringBuilder();
+//        Lexico lexico = new Lexico();
+//        lexico.setInput(input);
+//        try {
+//            mensagem.append( "Linha | Classe | Lexema\n");
+//            Token token = lexico.nextToken();
+//            while( token != null) {
+//                mensagem.append(GetLineFromPosition(token.getPosition()) + " ");
+//                mensagem.append(SearchInTokenList(token.getId()) + " "); mensagem.append(token.getLexeme()+"\n");
+//                token= lexico.nextToken(); }
+//            mensagem.append("Programa compilado com sucesso");
+//        }
+//        catch(LexicalError e)
+//        {
+//            mensagem = new StringBuilder();
+//            if(e.getMessage().contains("símbolo inválido"))
+//            {
+//                mensagem.append("Erro na linha " + GetLineFromPosition(e.getPosition()) +
+//                        " - " + textAreaCode.getText().charAt(e.getPosition()) + " -  símbolo inválido");
+//            }else
+//            {
+//                mensagem.append( "Erro na linha:" + GetLineFromPosition(e.getPosition())+ " - " + e.getMessage());
+//            }
+//        }finally {
+//            textAreaMessage.setText(mensagem.toString());
+//        }
+//    }
+
+
+    public void compile()
+    {
         var input = textAreaCode.getText();
         StringBuilder mensagem = new StringBuilder();
         Lexico lexico = new Lexico();
+        Sintatico sintatico = new Sintatico();
+        Semantico semantico = new Semantico();
+        //...
         lexico.setInput(input);
-        try {
-            mensagem.append( "Linha | Classe | Lexema\n");
-            Token token = lexico.nextToken();
-            while( token != null) {
-                mensagem.append(GetLineFromPosition(token.getPosition()) + " ");
-                mensagem.append(SearchInTokenList(token.getId()) + " "); mensagem.append(token.getLexeme()+"\n");
-                token= lexico.nextToken(); }
+        //...
+        try
+        {
+            sintatico.parse(lexico, semantico);    // tradução dirigida pela sintaxe
             mensagem.append("Programa compilado com sucesso");
         }
-        catch(LexicalError e)
+        // mensagem: programa compilado com sucesso - área reservada para mensagens
+        catch ( LexicalError e )
         {
             mensagem = new StringBuilder();
             if(e.getMessage().contains("símbolo inválido"))
@@ -123,6 +154,23 @@ public class CompiladorController {
             {
                 mensagem.append( "Erro na linha:" + GetLineFromPosition(e.getPosition())+ " - " + e.getMessage());
             }
+            //Trata erros léxicos, conforme especificação da parte 2 - do compilador
+        }
+        catch ( SyntaticError e )
+        {
+            mensagem = new StringBuilder();
+            mensagem.append("Erro na linha -"+GetLineFromPosition(e.getPosition()) +
+                    " símbolo encontrado: " + sintatico.getCurrentToken().getLexeme() +
+                    " " + e.getMessage());
+
+            //Trata erros sintáticos
+            //linha 				sugestão: converter getPosition em linha
+            //símbolo encontrado    sugestão: implementar um método getToken no sintatico
+            //mensagem - símbolos esperados,   alterar ParserConstants.java, String[] PARSER_ERROR
+        }
+        catch ( SemanticError e )
+        {
+            //Trata erros semânticos
         }finally {
             textAreaMessage.setText(mensagem.toString());
         }

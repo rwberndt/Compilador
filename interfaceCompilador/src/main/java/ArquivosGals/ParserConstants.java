@@ -105,9 +105,9 @@ public interface ParserConstants
     String[] PARSER_ERROR =
     {
         "",
-        "Era esperado fim de programa",
-        "Era esperado identificador",
-        "Era esperado constante_int",
+        "encontrado {0} esperado EOF",                                //        "Era esperado fim de programa",
+        "encontrado {0} esperado indentificador",                     // "Era esperado identificador",
+        "encontrado {0} esperado int",                                //"Era esperado constante_int",
         "Era esperado constante_float",
         "Era esperado constante_bin",
         "Era esperado constante_string",
