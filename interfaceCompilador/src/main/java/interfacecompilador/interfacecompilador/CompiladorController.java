@@ -96,39 +96,38 @@ public class CompiladorController {
         textAreaMessage.setText("Equipe: Vinícius da Cunha Lopes e Ricardo Berndt");
     }
 
-//    public void compile() {
-//        var input = textAreaCode.getText();
-//        StringBuilder mensagem = new StringBuilder();
-//        Lexico lexico = new Lexico();
-//        lexico.setInput(input);
-//        try {
-//            mensagem.append( "Linha | Classe | Lexema\n");
-//            Token token = lexico.nextToken();
-//            while( token != null) {
-//                mensagem.append(GetLineFromPosition(token.getPosition()) + " ");
-//                mensagem.append(SearchInTokenList(token.getId()) + " "); mensagem.append(token.getLexeme()+"\n");
-//                token= lexico.nextToken(); }
-//            mensagem.append("Programa compilado com sucesso");
-//        }
-//        catch(LexicalError e)
-//        {
-//            mensagem = new StringBuilder();
-//            if(e.getMessage().contains("símbolo inválido"))
-//            {
-//                mensagem.append("Erro na linha " + GetLineFromPosition(e.getPosition()) +
-//                        " - " + textAreaCode.getText().charAt(e.getPosition()) + " -  símbolo inválido");
-//            }else
-//            {
-//                mensagem.append( "Erro na linha:" + GetLineFromPosition(e.getPosition())+ " - " + e.getMessage());
-//            }
-//        }finally {
-//            textAreaMessage.setText(mensagem.toString());
-//        }
-//    }
+// public void compile() {
+// var input = textAreaCode.getText();
+// StringBuilder mensagem = new StringBuilder();
+// Lexico lexico = new Lexico();
+// lexico.setInput(input);
+// try {
+// mensagem.append( "Linha | Classe | Lexema\n");
+// Token token = lexico.nextToken();
+// while( token != null) {
+// mensagem.append(GetLineFromPosition(token.getPosition()) + " ");
+// mensagem.append(SearchInTokenList(token.getId()) + " "); mensagem.append(token.getLexeme()+"\n");
+// token= lexico.nextToken(); }
+// mensagem.append("Programa compilado com sucesso");
+// }
+// catch(LexicalError e)
+// {
+// mensagem = new StringBuilder();
+// if(e.getMessage().contains("símbolo inválido"))
+// {
+// mensagem.append("Erro na linha " + GetLineFromPosition(e.getPosition()) +
+// " - " + textAreaCode.getText().charAt(e.getPosition()) + " - símbolo inválido");
+// }else
+// {
+// mensagem.append( "Erro na linha:" + GetLineFromPosition(e.getPosition())+ " - " + e.getMessage());
+// }
+// }finally {
+// textAreaMessage.setText(mensagem.toString());
+// }
+// }
 
 
-    public void compile()
-    {
+    public void compile() {
         var input = textAreaCode.getText();
         StringBuilder mensagem = new StringBuilder();
         Lexico lexico = new Lexico();
@@ -137,78 +136,62 @@ public class CompiladorController {
         //...
         lexico.setInput(input);
         //...
-        try
-        {
-            sintatico.parse(lexico, semantico);    // tradução dirigida pela sintaxe
+        try {
+            sintatico.parse(lexico, semantico); // tradução dirigida pela sintaxe
             mensagem.append("Programa compilado com sucesso");
         }
-        // mensagem: programa compilado com sucesso - área reservada para mensagens
-        catch ( LexicalError e )
-        {
+    // mensagem: programa compilado com sucesso - área reservada para mensagens
+        catch (LexicalError e) {
             mensagem = new StringBuilder();
-            if(e.getMessage().contains("símbolo inválido"))
-            {
+            if (e.getMessage().contains("símbolo inválido")) {
                 mensagem.append("Erro na linha " + GetLineFromPosition(e.getPosition()) +
-                        " - " + textAreaCode.getText().charAt(e.getPosition()) + " -  símbolo inválido");
-            }else
-            {
-                mensagem.append( "Erro na linha:" + GetLineFromPosition(e.getPosition())+ " - " + e.getMessage());
+                        " - " + textAreaCode.getText().charAt(e.getPosition()) + " - símbolo inválido");
+            } else {
+                mensagem.append("Erro na linha:" + GetLineFromPosition(e.getPosition()) + " - " + e.getMessage());
             }
-            //Trata erros léxicos, conforme especificação da parte 2 - do compilador
-        }
-        catch ( SyntaticError e )
-        {
-            mensagem = new StringBuilder();
-            mensagem.append("Erro na linha -"+GetLineFromPosition(e.getPosition()) +
-                    " símbolo encontrado: " + sintatico.getCurrentToken().getLexeme() +
-                    " " + e.getMessage());
+//Trata erros léxicos, conforme especificação da parte 2 - do compilador
+        } catch (SyntaticError e) {
+            String linha = GetLineFromPosition(e.getPosition());
+            mensagem = new StringBuilder()
+                    .append("Erro na linha ")
+                    .append(" " + linha)
+                    .append(" - ")
+                    .append(e.getMessage().replace("{0}", sintatico.getCurrentToken().getLexeme()));
 
-            //Trata erros sintáticos
-            //linha 				sugestão: converter getPosition em linha
-            //símbolo encontrado    sugestão: implementar um método getToken no sintatico
-            //mensagem - símbolos esperados,   alterar ParserConstants.java, String[] PARSER_ERROR
-        }
-        catch ( SemanticError e )
-        {
-            //Trata erros semânticos
-        }finally {
+//Trata erros sintáticos
+//linha sugestão: converter getPosition em linha
+//símbolo encontrado sugestão: implementar um método getToken no sintatico
+//mensagem - símbolos esperados, alterar ParserConstants.java, String[] PARSER_ERROR
+        } catch (SemanticError e) {
+//Trata erros semânticos
+        } finally {
             textAreaMessage.setText(mensagem.toString());
         }
     }
-    public String SearchInTokenList(int id)
-    {
-        if(id==2)
-        {
+
+    public String SearchInTokenList(int id) {
+        if (id == 2) {
             return "identificador";
-        }
-        else if(id==3)
-        {
+        } else if (id == 3) {
             return "int";
+        } else if (id == 4) {
+            return "float";
+        } else if (id == 5) {
+            return "bin";
+        } else if (id == 6) {
+            return "string";
+        } else if (id <= 26) {
+            return "simbolo especial";
+        } else if (id <= 36) {
+            return "palavra reservada";
         }
-        else if(id==4)
-        {
-            return "float"; }
-        else if(id==5)
-        {
-            return "bin"; }
-        else if(id==6)
-        {
-            return "string"; }
-        else if(id <= 26)
-        {
-            return "simbolo especial"; }
-        else if(id<=36)
-        {
-            return "palavra reservada"; }
 
         return "class not found";
     }
 
-    public String GetLineFromPosition(Integer position)
-    {
+    public String GetLineFromPosition(Integer position) {
         Integer lines = 0;
-        for (int i = 0; i < position; i++)
-        {
+        for (int i = 0; i < position; i++) {
             if (textAreaCode.getText().charAt(i) == '\n') {
                 lines++;
             }
@@ -237,7 +220,7 @@ public class CompiladorController {
     }
 
     public void controlLines() {
-        var contagem = textAreaCode.getText().chars().filter(a -> a == '\n').count()+1;
+        var contagem = textAreaCode.getText().chars().filter(a -> a == '\n').count() + 1;
 
         if (contagem > qtdlines) {
             qtdlines++;
