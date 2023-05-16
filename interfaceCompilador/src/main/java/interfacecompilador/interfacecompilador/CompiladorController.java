@@ -147,7 +147,7 @@ public class CompiladorController {
                 mensagem.append("Erro na linha " + GetLineFromPosition(e.getPosition()) +
                         " - " + textAreaCode.getText().charAt(e.getPosition()) + " - símbolo inválido");
             } else {
-                mensagem.append("Erro na linha:" + GetLineFromPosition(e.getPosition()) + " - " + e.getMessage());
+                mensagem.append("Erro na linha: " + GetLineFromPosition(e.getPosition()) + " - " + e.getMessage());
             }
 //Trata erros léxicos, conforme especificação da parte 2 - do compilador
         } catch (SyntaticError e) {
