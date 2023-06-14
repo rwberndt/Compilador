@@ -217,7 +217,7 @@ public class Semantico implements Constants
     public void metodo_acao20()throws SemanticError {
         Integer tipo1 = pilha_tipos.pop();
         Integer tipo2 = pilha_tipos.pop();
-        if (!tipo1.equals("int64") || !tipo2.equals("int64")) {
+        if (!tipo1.equals(1) || !tipo2.equals(1)) {
             throw new SemanticError("tipo(s) incompatível(is) em expressão aritmética");
         }
 
