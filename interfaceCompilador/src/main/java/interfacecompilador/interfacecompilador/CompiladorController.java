@@ -15,6 +15,10 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.Date;
+import java.time.LocalDateTime;
 
 public class CompiladorController {
 
@@ -127,7 +131,7 @@ public class CompiladorController {
 // }
 
 
-    public void compile() {
+    public void compile() throws IOException {
         var input = textAreaCode.getText();
         StringBuilder mensagem = new StringBuilder();
         Lexico lexico = new Lexico();
@@ -149,7 +153,7 @@ public class CompiladorController {
             } else {
                 mensagem.append("Erro na linha: " + GetLineFromPosition(e.getPosition()) + " - " + e.getMessage());
             }
-//Trata erros léxicos, conforme especificação da parte 2 - do compilador
+    //Trata erros léxicos, conforme especificação da parte 2 - do compilador
         } catch (SyntaticError e) {
             String linha = GetLineFromPosition(e.getPosition());
             mensagem = new StringBuilder()
@@ -158,14 +162,18 @@ public class CompiladorController {
                     .append(" - ")
                     .append(e.getMessage().replace("{0}", sintatico.getCurrentToken().getLexeme()));
 
-//Trata erros sintáticos
-//linha sugestão: converter getPosition em linha
-//símbolo encontrado sugestão: implementar um método getToken no sintatico
-//mensagem - símbolos esperados, alterar ParserConstants.java, String[] PARSER_ERROR
+    //Trata erros sintáticos
+    //linha sugestão: converter getPosition em linha
+    //símbolo encontrado sugestão: implementar um método getToken no sintatico
+    //mensagem - símbolos esperados, alterar ParserConstants.java, String[] PARSER_ERROR
         } catch (SemanticError e) {
-//Trata erros semânticos
+    //Trata erros semânticos
         } finally {
             textAreaMessage.setText(mensagem.toString());
+            String pathName = folder.replace("txt","il");
+            File arquivo = new File(pathName);
+            System.out.println("path arquivo: " + arquivo.getAbsolutePath());
+            semantico.appendToFileCodigoIl(arquivo);
         }
     }
 
