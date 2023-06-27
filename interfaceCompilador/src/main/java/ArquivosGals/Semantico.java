@@ -15,9 +15,9 @@ public class Semantico implements Constants
     Stack<Integer> pilha_tipos; // tipo pilha int64 - 1 float64 - 2 String - 3 bool - 4
 
     private int contagem = 0;
-    private static final Integer _Float = 1;
-    private static final Integer _Int = 0;
-    private static final Integer _String = 2;
+    private static final Integer _Float = 2;
+    private static final Integer _Int = 1;
+    private static final Integer _String = 3;
     private static final Integer _Bool = 4;
 
     private final String TEMP_INT = "_temp_int";
@@ -110,7 +110,7 @@ public class Semantico implements Constants
             case 33: metodo_acao33();
                 break;
         }
-            System.out.println("Ação #"+action+", Token: "+token);
+        System.out.println("Ação #"+action+", Token: "+token);
     }
 
     private boolean verificaCompativel(String tipoVar, Integer tipoValor) {
@@ -143,9 +143,28 @@ public class Semantico implements Constants
                 return "bool";
             }
         }
-
         throw new RuntimeException("O tipo de variável %s não possui uma classe definida".formatted(tipoVariavel));
     }
+
+
+    private String getClasseIlMai(Integer tipoVariavel) {
+
+        switch (tipoVariavel) {
+            case 1 -> {
+                return "Int64";
+            }
+            case 2 -> {
+                return "Double";
+            }
+            case 3 -> {
+                return "String";
+            }
+            case 4 -> {
+                return "Boolean";
+            }
+        }
+        throw new RuntimeException("O tipo de variável %s não possui uma classe definida".formatted(tipoVariavel));
+    };
 
     private String ajustarFormatacaoNumeros(String num) {
         return num.replace(".", "").replace(",",".");
@@ -158,7 +177,7 @@ public class Semantico implements Constants
     }
     public void metodo_acao06(Token token){
         pilha_tipos.add(2);
-        codigo.add("ldc.i8 ".concat(ajustarFormatacaoNumeros(token.getLexeme())+"\n"));
+        codigo.add("ldc.r8 ".concat(ajustarFormatacaoNumeros(token.getLexeme())+"\n"));
     }
 
     public void metodo_acao14()
@@ -172,15 +191,13 @@ public class Semantico implements Constants
     }
     public void metodo_acao15()
     {
-      codigo.add(".assembly extern mscorlib {}\n");
-      codigo.add(".assembly _codigo_objeto {}\n");
-      codigo.add(".module _codigo_objeto.exe\n");
-      codigo.add("\n");
-      codigo.add(".class public _UNICA{\n");
-      codigo.add(".method static public void _principal() {\n");
-      codigo.add(".entrypoint\n");
-      codigo.add(".locals (int64 dividendo) \n");
-      codigo.add(".locals (int64 divisor) \n");
+        codigo.add(".assembly extern mscorlib {}\n");
+        codigo.add(".assembly _codigo_objeto {}\n");
+        codigo.add(".module _codigo_objeto.exe\n");
+        codigo.add("\n");
+        codigo.add(".class public _UNICA{\n");
+        codigo.add(".method static public void _principal() {\n");
+        codigo.add(".entrypoint\n");
 
     }
 
@@ -191,7 +208,7 @@ public class Semantico implements Constants
     }
 
     public void adicionaPilhaTipoAritimetico(Integer tipo , Integer tipo2){
-        if(tipo == 2 || tipo2 == 2)
+        if(tipo.equals( 2) || tipo2.equals(2))
         {
             pilha_tipos.add(2);
         }else
@@ -224,6 +241,8 @@ public class Semantico implements Constants
 
         adicionaPilhaTipoAritimetico(tipo1,tipo2);
         codigo.add("mul \n");
+
+        if (pilha_tipos.peek().equals(1)) codigo.add("conv.i8");
     }
     public void metodo_acao04() throws SemanticError
     {
@@ -252,6 +271,8 @@ public class Semantico implements Constants
     {
         int tipo1 = pilha_tipos.pop();
         int tipo2 = pilha_tipos.pop();
+
+        pilha_tipos.add(4);
 
         switch (operador)
         {
@@ -284,14 +305,6 @@ public class Semantico implements Constants
     }
     public void metodo_acao13() throws SemanticError
     {
-        int tipo1 = pilha_tipos.pop();
-        if(tipo1 == 4)
-        {
-            pilha_tipos.add(4);
-        }else
-        {
-            throw new SemanticError("erro de tipos boolean");
-        }
         codigo.add("ldc.i4.1 \n");
         codigo.add("xor \n");
     }
@@ -303,16 +316,14 @@ public class Semantico implements Constants
     public void metodo_acao18() throws SemanticError {
         Integer tipo1 = pilha_tipos.pop();
         Integer tipo2 = pilha_tipos.pop();
-        if(tipo1 != tipo2)
-            throw new SemanticError("os tipos não são compatíveis");
+
         pilha_tipos.push(4);
         codigo.add("and \n");
     }
     public void metodo_acao19() throws SemanticError{
         Integer tipo1 = pilha_tipos.pop();
         Integer tipo2 = pilha_tipos.pop();
-        if(tipo1 != tipo2)
-            throw new SemanticError("os tipos não são compatíveis");
+
 
         pilha_tipos.push(4);
         codigo.add("or \n");
@@ -330,7 +341,9 @@ public class Semantico implements Constants
         listaid.add(token.getLexeme());
     }
     public void metodo_acao23(Token token) throws SemanticError {
-        if (listaid.contains(token.getLexeme())) {
+
+
+        if (simbolos.get(token.getLexeme()) != null) {
             codigo.add("ldloc " + token.getLexeme() + " \n");
 
             if (simbolos.get(token.getLexeme()).equals(1)) {
@@ -340,33 +353,33 @@ public class Semantico implements Constants
             pilha_tipos.push(simbolos.get(token.getLexeme()));
 
         } else {
-            throw new SemanticError("");
+            throw new SemanticError("identificador " + token.getLexeme() + " não declarado");
         }
 
     }
     public void metodo_acao24() throws SemanticError {
-        String varTemp = listaid.get(listaid.size() - 1);
 
-        codigo.add("ldloc " + varTemp+ " \n");
+        Integer vartipo = pilha_tipos.pop();
 
-        for (int i = 1; i < listaid.size() - 1; i++) {
+        for (int i = 0; i < listaid.size() - 1; i++) {
             codigo.add("dup \n");
         }
 
         for (String id : listaid) {
 
-            if (simbolos.get(id) == null) {
-                codigo.add(".locals (%s %s)".formatted(varTemp, id) + " \n");
-                simbolos.put(id, simbolos.size());
+            if (simbolos.get(id) ==  null || simbolos.get(id) == 0 ) {
+                codigo.add(".locals (%s %s)".formatted(getClasseIl(vartipo), id) + " \n");
+                simbolos.put(id, vartipo);
             } else {
-                if (!verificaCompativel(varTemp, simbolos.get(id))) {
+                if (!verificaCompativel(getClasseIl(vartipo), simbolos.get(id))) {
                     throw new SemanticError("Tipos incompatíveis em comando de atribuição");
                 }
             }
-
+            if (simbolos.get(id).equals(1)) {
+                codigo.add("conv.i8");
+            }
             codigo.add("stloc " + id + " \n");
         }
-
         listaid.clear();
     }
 
@@ -406,22 +419,30 @@ public class Semantico implements Constants
         String varTemp = listaid.get(listaid.size() - 1);
         listaid.remove(listaid.size() - 1);
 
-        for (int i = 1; i < listaid.size() - 1; i++) {
+        if(varTemp != null){
+            codigo.add("ldloc " + varTemp+ " \n");
+        }
+
+        Integer vartipo = pilha_tipos.pop();
+
+        for (int i = 0; i < listaid.size() - 1; i++) {
             codigo.add("dup \n");
         }
 
         for (String id : listaid) {
 
-            if (simbolos.get(id) == null) {
-                codigo.add(".locals (%s %s)".formatted(varTemp, id) + " \n");
-                simbolos.put(id, simbolos.size());
+            if (simbolos.get(id) ==  null || simbolos.get(id) == 0 ) {
+                codigo.add(".locals (%s %s)".formatted(getClasseIl(vartipo), id) + " \n");
+                simbolos.put(id, vartipo);
             } else {
-                if (!verificaCompativel(varTemp, simbolos.get(id))) {
+                if (!verificaCompativel(getClasseIl(vartipo), simbolos.get(id))) {
                     throw new SemanticError("Tipos incompatíveis em comando de atribuição");
                 }
             }
-
-            codigo.add("stloc " + id);
+            if (simbolos.get(id).equals(1)) {
+                codigo.add("conv.i8");
+            }
+            codigo.add("stloc " + id + " \n");
         }
 
         codigo.add(rotulo + ": \n");
@@ -434,7 +455,7 @@ public class Semantico implements Constants
             Integer tipoVar = simbolos.get(id);
 
             // Verifica se a variável já foi declarada
-            if (tipoVar == 0) {
+            if (tipoVar == null || tipoVar == 0) {
                 throw new SemanticError("Identificador %s não declarado".formatted(id));
             }
 
@@ -442,13 +463,13 @@ public class Semantico implements Constants
 
             if (!tipoVar.equals(_String))
             {
-                codigo.add("call " + tipoVar + " [mscorlib]System." + getClasseIl(tipoVar) + "::Parse(string) \n");
+                codigo.add("call " + getClasseIl(tipoVar) + " [mscorlib]System." + getClasseIlMai(tipoVar) + "::Parse(string) \n");
             }
 
             codigo.add("stloc " + id + " \n");
         }
-
         listaid.clear();
+
     }
 
     private void metodo_acao28(){
@@ -456,10 +477,10 @@ public class Semantico implements Constants
         pilha_tipos.pop();
 
         contagem++;
-        codigo.add("brfalse " + pilhaRotulo.peek() + " \n");
 
         pilhaRotulo.push("r_" + contagem);
 
+        codigo.add("brfalse " + pilhaRotulo.peek() + " \n");
     }
 
 
@@ -468,18 +489,16 @@ public class Semantico implements Constants
     }
     public void metodo_acao30(Token token) {
         contagem++;
-        codigo.add("br r_" + pilhaRotulo.peek());
 
-        pilhaRotulo.pop();
+        codigo.add("br r_" + contagem);
+
+        String rotulo1 = pilhaRotulo.pop();
+        codigo.add(rotulo1 + ":");
 
         pilhaRotulo.add("r_" + contagem);
-
-        codigo.add(pilhaRotulo.peek()+" \n");
     }
 
     private void metodo_acao31() {
-
-        pilha_tipos.pop();
 
         contagem++;
         pilhaRotulo.add("r_" + contagem);
@@ -489,13 +508,14 @@ public class Semantico implements Constants
 
     private void metodo_acao32() {
         pilhaRotulo.add("r_" + contagem);
-        codigo.add("brfalse " + pilhaRotulo.peek() + " \n");
+        codigo.add("brtrue " + pilhaRotulo.peek() + " \n");
     }
 
     private void metodo_acao33(){
 
-        String r1 = pilhaRotulo.pop();
+
         String r2 = pilhaRotulo.pop();
+        String r1 = pilhaRotulo.pop();
 
         codigo.add("br " + r1 + " \n");
         codigo.add(r2 + ": \n");

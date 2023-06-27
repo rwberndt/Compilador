@@ -167,6 +167,7 @@ public class CompiladorController {
     //símbolo encontrado sugestão: implementar um método getToken no sintatico
     //mensagem - símbolos esperados, alterar ParserConstants.java, String[] PARSER_ERROR
         } catch (SemanticError e) {
+            mensagem.append("Erro na linha: " + GetLineFromPosition(e.getPosition()) + " - " + e.getMessage());
     //Trata erros semânticos
         } finally {
             textAreaMessage.setText(mensagem.toString());
